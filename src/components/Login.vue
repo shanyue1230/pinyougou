@@ -63,11 +63,25 @@ export default {
         // 校验成功，发送ajax请求
         axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
           // 解构
-          const { status, msg } = res.data.meta
+          console.log(res.data)
+          const { meta: { status, msg }, data: { token } } = res.data
           if (status === 200) {
-            console.log('登录陈宫')
+            // 给一个提示消息
+            this.$message({
+              message: '登录成功',
+              type: 'success',
+              duration: 1000
+            })
+            // 存储token
+            localStorage.setItem('token', token)
+            // 跳转到首页组件
+            this.$router.push({ name: 'index' })
           } else {
-            console.log('登录失败', msg)
+            // this.$message({
+            //   message: msg,
+            //   type: 'error'
+            // })
+            this.$message.error(msg)
           }
         })
       })
