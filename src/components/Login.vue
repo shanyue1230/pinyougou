@@ -7,13 +7,14 @@
       el-form-item: 一个表单项
         label="活动名称"： 每个表单项的label
       el-input: 输入文本框组件
+
      -->
-    <el-form :model="form" label-width="80px">
+    <el-form :rules="rules" :model="form" label-width="80px" status-icon>
       <img src="../assets/avatar.jpg" alt="">
-      <el-form-item label="用户名">
+      <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
+      <el-form-item label="密码" prop="password">
         <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item>
@@ -28,9 +29,24 @@
 export default {
   data () {
     return {
+      // 表单数据
       form: {
         username: '',
         password: ''
+      },
+      // 表单校验规则
+      rules: {
+        username: [
+          // required: 非空规则
+          // message: 提示信息
+          // trigger: 触发的方式  blur  change
+          { required: true, message: '请输入用户名', trigger: 'change' },
+          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'change' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'change' },
+          { min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'change' }
+        ]
       }
     }
   },
