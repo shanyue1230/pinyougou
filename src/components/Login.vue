@@ -26,6 +26,8 @@
 </template>
 
 <script>
+// 导入axios
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -56,10 +58,18 @@ export default {
       this.$refs.form.resetFields()
     },
     login () {
-      this.$refs.form.validate(function (isValid) {
-        if (isValid) {
-          console.log('发送ajax请求')
-        }
+      this.$refs.form.validate(isValid => {
+        if (!isValid) return false
+        // 校验成功，发送ajax请求
+        axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
+          // 解构
+          const { status, msg } = res.data.meta
+          if (status === 200) {
+            console.log('登录陈宫')
+          } else {
+            console.log('登录失败', msg)
+          }
+        })
       })
     }
   }
