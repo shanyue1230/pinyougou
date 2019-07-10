@@ -15,4 +15,9 @@ export default {
   padding: 0;
   list-style: none;
 }
+html,
+body,
+#app {
+  height: 100%;
+}
 </style>
