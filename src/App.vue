@@ -15,8 +15,4 @@ export default {
   padding: 0;
   list-style: none;
 }
-
-body {
-  background-color: #2d434c;
-}
 </style>
