@@ -9,7 +9,7 @@
       el-input: 输入文本框组件
 
      -->
-    <el-form :rules="rules" :model="form" label-width="80px" status-icon>
+    <el-form ref="form" :rules="rules" :model="form" label-width="80px" status-icon>
       <img src="../assets/avatar.jpg" alt="">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
@@ -18,8 +18,8 @@
         <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">登录</el-button>
-        <el-button>重置</el-button>
+        <el-button type="primary" @click="login">登录</el-button>
+        <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -51,8 +51,16 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    resetForm () {
+      // 获取表单组件，调用方法
+      this.$refs.form.resetFields()
+    },
+    login () {
+      this.$refs.form.validate(function (isValid) {
+        if (isValid) {
+          console.log('发送ajax请求')
+        }
+      })
     }
   }
 }
