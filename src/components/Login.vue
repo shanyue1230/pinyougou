@@ -63,8 +63,9 @@ export default {
         // 校验成功，发送ajax请求
         axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
           // 解构
-          console.log(res.data)
-          const { meta: { status, msg }, data: { token } } = res.data
+          // console.log(res.data)
+          // 只要登录不成功，data就是一个null，不能从data中解构出token
+          const { meta: { status, msg }, data } = res.data
           if (status === 200) {
             // 给一个提示消息
             this.$message({
@@ -73,14 +74,10 @@ export default {
               duration: 1000
             })
             // 存储token
-            localStorage.setItem('token', token)
+            localStorage.setItem('token', data.token)
             // 跳转到首页组件
             this.$router.push({ name: 'index' })
           } else {
-            // this.$message({
-            //   message: msg,
-            //   type: 'error'
-            // })
             this.$message.error(msg)
           }
         })
