@@ -26,8 +26,6 @@
 </template>
 
 <script>
-// 导入axios
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -61,11 +59,11 @@ export default {
       this.$refs.form.validate(isValid => {
         if (!isValid) return false
         // 校验成功，发送ajax请求
-        axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
+        this.axios.post('login', this.form).then(res => {
           // 解构
           // console.log(res.data)
           // 只要登录不成功，data就是一个null，不能从data中解构出token
-          const { meta: { status, msg }, data } = res.data
+          const { meta: { status, msg }, data } = res
           if (status === 200) {
             // 给一个提示消息
             this.$message({
