@@ -180,30 +180,19 @@ export default {
     this.getUserList()
   },
   methods: {
-    getUserList () {
-      // 发送ajax请求，获取数据
-      // axios.get('url', {
-      //   params
-      // })
-      this.axios.get('users', {
+    async getUserList () {
+      const { meta, data } = await this.axios.get('users', {
         params: {
           query: this.query,
           pagenum: this.pagenum,
           pagesize: this.pagesize
         }
-        // 请求头
-        // 基于token认证，必须带上token
-        // headers: {
-        //   Authorization: localStorage.getItem('token')
-        // }
-      }).then(res => {
-        const { meta, data } = res
-        // 如果数据成功，设置给tableData
-        if (meta.status === 200) {
-          this.tableData = data.users
-          this.total = data.total
-        }
       })
+      // 如果数据成功，设置给tableData
+      if (meta.status === 200) {
+        this.tableData = data.users
+        this.total = data.total
+      }
     },
     handleSizeChange (val) {
       this.pagesize = val
@@ -221,72 +210,70 @@ export default {
       this.pagenum = 1
       this.getUserList()
     },
-    deleteUser (id) {
-      // console.log(id)
-      this.$confirm('亲,你确定要删除吗?', '温馨提示', {
-        type: 'warning'
-      }).then(() => {
-        // 发送ajax请求
-        this.axios.delete(`users/${id}`).then(res => {
-          const { meta } = res
-          if (meta.status === 200) {
-            this.$message.success('删除成功')
-            // 判断，如果当前页就剩下一条，应该让pagenum -1
-            if (this.tableData.length === 1 && this.pagenum > 1) {
-              this.pagenum--
-            }
-            // 重新渲染
-            this.getUserList()
-          } else {
-            this.$message.error(meta.msg)
-          }
+    async deleteUser (id) {
+      try {
+        // 等待点击确定按钮
+        await this.$confirm('亲,你确定要删除吗?', '温馨提示', {
+          type: 'warning'
         })
-      }).catch(() => {
-        this.$message('操作取消')
-      })
-    },
-    changeState ({ id, mg_state: state }) {
-      // console.log(user)
-      this.axios.put(`users/${id}/state/${state}`).then(res => {
-        const { status, msg } = res.meta
-        if (status === 200) {
-          // 成功
-          this.$message.success('修改状态成功')
-          // 要不要重新渲染
+        // 等待ajax成功结果
+        const { meta } = await this.axios.delete(`users/${id}`)
+        if (meta.status === 200) {
+          this.$message.success('删除成功')
+          // 判断，如果当前页就剩下一条，应该让pagenum -1
+          if (this.tableData.length === 1 && this.pagenum > 1) {
+            this.pagenum--
+          }
+          // 重新渲染
           this.getUserList()
         } else {
-          this.$message.error(msg)
+          this.$message.error(meta.msg)
         }
-      })
+      } catch (e) {
+        this.$message('取消删除')
+      }
+    },
+    async changeState ({ id, mg_state: state }) {
+      const res = await this.axios.put(`users/${id}/state/${state}`)
+      const { status, msg } = res.meta
+      if (status === 200) {
+        // 成功
+        this.$message.success('修改状态成功')
+        // 要不要重新渲染
+        this.getUserList()
+      } else {
+        this.$message.error(msg)
+      }
     },
     showAddDialog () {
       this.addDialogVisible = true
     },
-    addUser () {
-      this.$refs.addForm.validate(valid => {
-        if (!valid) return false
+    async addUser () {
+      try {
+        await this.$refs.addForm.validate()
         // 发送ajax请求
-        this.axios.post('users', this.addForm).then(res => {
-          const { status, msg } = res.meta
-          if (status === 201) {
-            // 提示消息
-            this.$message.success('添加用户成功')
+        const res = await this.axios.post('users', this.addForm)
+        const { status, msg } = res.meta
+        if (status === 201) {
+          // 提示消息
+          this.$message.success('添加用户成功')
 
-            // 重置表单
-            this.$refs.addForm.resetFields()
+          // 重置表单
+          this.$refs.addForm.resetFields()
 
-            // 隐藏对话框
-            this.addDialogVisible = false
+          // 隐藏对话框
+          this.addDialogVisible = false
 
-            // 重新渲染
-            this.total++
-            this.pagenum = Math.ceil(this.total / this.pagesize)
-            this.getUserList()
-          } else {
-            this.$message.error(msg)
-          }
-        })
-      })
+          // 重新渲染
+          this.total++
+          this.pagenum = Math.ceil(this.total / this.pagesize)
+          this.getUserList()
+        } else {
+          this.$message.error(msg)
+        }
+      } catch (e) {
+        return false
+      }
     },
     showEditDialog (user) {
       this.editDialogVisible = true
@@ -297,26 +284,27 @@ export default {
       this.editForm = { ...user }
       // console.log(this.editForm)
     },
-    editUser () {
-      this.$refs.editForm.validate(valid => {
-        if (!valid) return false
+    async editUser () {
+      try {
+        await this.$refs.editForm.validate()
         const { id, email, mobile } = this.editForm
         // 发送ajax请求，修改用户
-        this.axios.put(`users/${id}`, { email, mobile }).then(res => {
-          const { status, msg } = res.meta
-          if (status === 200) {
-            this.$message.success('修改成功')
-            // 重置表单
-            this.$refs.editForm.resetFields()
-            // 关闭模态框
-            this.editDialogVisible = false
-            // 重新渲染
-            this.getUserList()
-          } else {
-            this.$message.error(msg)
-          }
-        })
-      })
+        const res = await this.axios.put(`users/${id}`, { email, mobile })
+        const { status, msg } = res.meta
+        if (status === 200) {
+          this.$message.success('修改成功')
+          // 重置表单
+          this.$refs.editForm.resetFields()
+          // 关闭模态框
+          this.editDialogVisible = false
+          // 重新渲染
+          this.getUserList()
+        } else {
+          this.$message.error(msg)
+        }
+      } catch (e) {
+        return false
+      }
     }
   }
 }
