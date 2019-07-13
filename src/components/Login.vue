@@ -41,7 +41,7 @@ export default {
           // message: 提示信息
           // trigger: 触发的方式  blur  change
           { required: true, message: '请输入用户名', trigger: 'change' },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'change' }
+          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'change' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'change' },
