@@ -213,6 +213,7 @@ export default {
     async deleteUser (id, e) {
       // 获取到了点击的那个按钮
       // console.log(e.target)
+      console.log(e)
       try {
         // 等待点击确定按钮
         await this.$confirm('亲,你确定要删除吗?', '温馨提示', {
@@ -316,12 +317,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.el-breadcrumb {
-  padding-left: 10px;
-  height: 40px;
-  line-height: 40px;
-  background-color: #ddd;
-}
-
 </style>
