@@ -26,8 +26,6 @@
 </template>
 
 <script>
-// 导入axios
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -43,7 +41,7 @@ export default {
           // message: 提示信息
           // trigger: 触发的方式  blur  change
           { required: true, message: '请输入用户名', trigger: 'change' },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'change' }
+          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'change' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'change' },
@@ -57,31 +55,50 @@ export default {
       // 获取表单组件，调用方法
       this.$refs.form.resetFields()
     },
-    login () {
-      this.$refs.form.validate(isValid => {
-        if (!isValid) return false
-        // 校验成功，发送ajax请求
-        axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
-          // 解构
-          // console.log(res.data)
-          // 只要登录不成功，data就是一个null，不能从data中解构出token
-          const { meta: { status, msg }, data } = res.data
-          if (status === 200) {
-            // 给一个提示消息
-            this.$message({
-              message: '登录成功',
-              type: 'success',
-              duration: 1000
-            })
-            // 存储token
-            localStorage.setItem('token', data.token)
-            // 跳转到首页组件
-            this.$router.push({ name: 'index' })
-          } else {
-            this.$message.error(msg)
-          }
-        })
-      })
+    async login () {
+      // 对表单进行校验
+      // 如果校验成功了，会走resolve, 如果失败了，就走reject
+      try {
+        // 等待表单校验成功
+        await this.$refs.form.validate()
+        // 从成功的结果中结构出来meta 和 data
+        const { meta, data } = await this.axios.post('login', this.form)
+        if (meta.status === 200) {
+          this.$message.success('登录成功')
+          // 存储token
+          localStorage.setItem('token', data.token)
+          // 跳转首页
+          this.$router.push({ name: 'index' })
+        } else {
+          this.$message.error(meta.msg)
+        }
+      } catch (e) {
+        return false
+      }
+      // this.$refs.form.validate(isValid => {
+      //   if (!isValid) return false
+      //   // 校验成功，发送ajax请求
+      //   const res = this.axios.post('login', this.form).then(res => {
+      //     // 解构
+      //     // console.log(res.data)
+      //     // 只要登录不成功，data就是一个null，不能从data中解构出token
+      //     const { meta: { status, msg }, data } = res
+      //     if (status === 200) {
+      //       // 给一个提示消息
+      //       this.$message({
+      //         message: '登录成功',
+      //         type: 'success',
+      //         duration: 1000
+      //       })
+      //       // 存储token
+      //       localStorage.setItem('token', data.token)
+      //       // 跳转到首页组件
+      //       this.$router.push({ name: 'index' })
+      //     } else {
+      //       this.$message.error(msg)
+      //     }
+      //   })
+      // })
     }
   }
 }
