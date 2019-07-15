@@ -53,7 +53,7 @@
       >
         <template v-slot:default="{ row }">
           <el-button @click="showEditDialog(row)" type="primary" icon="el-icon-edit" plain circle size="small"></el-button>
-          <el-button @click="deleteUser(row.id)" type="danger" icon="el-icon-delete" plain circle size="small"></el-button>
+          <el-button @click="deleteUser(row.id, $event)" type="danger" icon="el-icon-delete" plain circle size="small"></el-button>
           <el-button type="success" icon="el-icon-edit" plain round size="small">分配角色</el-button>
         </template>
       </el-table-column>
@@ -210,7 +210,9 @@ export default {
       this.pagenum = 1
       this.getUserList()
     },
-    async deleteUser (id) {
+    async deleteUser (id, e) {
+      // 获取到了点击的那个按钮
+      // console.log(e.target)
       try {
         // 等待点击确定按钮
         await this.$confirm('亲,你确定要删除吗?', '温馨提示', {
@@ -232,6 +234,8 @@ export default {
       } catch (e) {
         this.$message('取消删除')
       }
+      // 失去焦点
+      e.target.blur()
     },
     async changeState ({ id, mg_state: state }) {
       const res = await this.axios.put(`users/${id}/state/${state}`)
@@ -271,7 +275,8 @@ export default {
         } else {
           this.$message.error(msg)
         }
-      } catch (e) {
+      } catch {
+        // e:代表的异常信息
         return false
       }
     },
