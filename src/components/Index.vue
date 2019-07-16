@@ -63,11 +63,11 @@ export default {
     }
   },
   async created () {
-    console.log(this.$route)
+    // console.log(this.$route)
     const res = await this.axios.get('menus')
     if (res.meta.status === 200) {
       this.menuList = res.data
-      console.log(this.menuList)
+      // console.log(this.menuList)
     }
   },
   methods: {

@@ -7,6 +7,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import axios from 'axios'
 
+import ElTreeGrid from 'element-tree-grid'
+
+// 全局注册组件
+// console.log(ElTreeGrid.name)
+Vue.component('el-table-tree-column', ElTreeGrid)
+
 // 因为axiox本质上和vue没有关系，但是强行添加关系
 Vue.prototype.axios = axios
 // 设置axios全局默认的BASE-URL， 只要设置了全局的默认base_url，以后的请求会自动拼接上base_url

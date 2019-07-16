@@ -3045,6 +3045,11 @@ elegant-spinner@^1.0.1:
   resolved "https://registry.npm.taobao.org/elegant-spinner/download/elegant-spinner-1.0.1.tgz#db043521c95d7e303fd8f345bedc3349cfb0729e"
   integrity sha1-2wQ1IcldfjA/2PNFvtwzSc+wcp4=
 
+element-tree-grid@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/element-tree-grid/-/element-tree-grid-0.1.3.tgz#5cae79ce738f3b4e87072538bac672a32f1b0c33"
+  integrity sha512-+8R9xDkaUig3tXQg+Z6AqLCIjtoJlEhPO8HLfy3+BEyNfdMU7qAr5l3+M6aVs86sH55fzHr1FhHqhuAk4CkBiA==
+
 element-ui@^2.10.1:
   version "2.10.1"
   resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.10.1.tgz#1011016e50e76f5dae6fbf9c86e53b6e53fcb9eb"
