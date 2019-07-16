@@ -7,7 +7,6 @@
       el-form-item: 一个表单项
         label="活动名称"： 每个表单项的label
       el-input: 输入文本框组件
-
      -->
     <el-form ref="form" :rules="rules" :model="form" label-width="80px" status-icon>
       <img src="../assets/avatar.jpg" alt="">
