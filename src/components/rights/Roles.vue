@@ -113,10 +113,10 @@ export default {
       },
       rules: {
         roleName: [
-          { required: true, message: '请输入角色名称', trigger: ['blur'] }
+          { required: true, message: '请输入角色名称', trigger: ['change', 'blur'] }
         ],
         roleDesc: [
-          { required: true, message: '请输入角色描述', trigger: ['blur'] }
+          { required: true, message: '请输入角色描述', trigger: ['change', 'blur'] }
         ]
       }
     }
@@ -246,12 +246,24 @@ export default {
       this.form.id = ''
       this.form.roleName = ''
       this.form.roleDesc = ''
+
+      // 保证校验结果显示后才能清空
+      this.$nextTick(() => {
+        // 重置表单的校验规则
+        this.$refs.form.clearValidate()
+      }, 100)
     },
     showEditDialog (row) {
       this.editVisible = true
       this.form.id = row.id
       this.form.roleName = row.roleName
       this.form.roleDesc = row.roleDesc
+
+      // 保证校验结果显示后才能清空
+      this.$nextTick(() => {
+        // 重置表单的校验规则
+        this.$refs.form.clearValidate()
+      }, 100)
     },
     async editRole () {
       // 校验功能

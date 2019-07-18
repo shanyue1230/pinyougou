@@ -4,10 +4,18 @@ import router from './router'
 import ElementUI from 'element-ui'
 // 引入elementUI的样式
 import 'element-ui/lib/theme-chalk/index.css'
-
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 import axios from 'axios'
-
 import ElTreeGrid from 'element-tree-grid'
+import moment from 'moment'
+import VueQuillEditor from 'vue-quill-editor'
+
+// 定义全局的过滤器
+Vue.filter('dateFilter', function (value) {
+  return moment(value * 1000).format('YYYY-MM-DD HH:mm:ss')
+})
 
 // 全局注册组件
 // console.log(ElTreeGrid.name)
@@ -40,6 +48,7 @@ axios.interceptors.response.use(function (response) {
 })
 // 使用elementUI插件
 Vue.use(ElementUI)
+Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 new Vue({

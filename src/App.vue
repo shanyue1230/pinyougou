@@ -27,5 +27,13 @@ body,
     line-height: 40px;
     background-color: #ddd;
   }
+
+  .quill-editor {
+    background-color: #fff;
+    .ql-editor {
+      height: 300px;
+    }
+  }
 }
+
 </style>
